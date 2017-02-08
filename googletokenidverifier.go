@@ -1,4 +1,4 @@
-package GoogleIdTokenVerifier
+package googleIdTokenVerifier
 
 import (
 	"bytes"
@@ -17,6 +17,8 @@ import (
 	"strings"
 	"time"
 )
+
+var certs *Certs
 
 // Certs is
 type Certs struct {
@@ -55,7 +57,7 @@ type TokenInfo struct {
 
 // Verify is
 func Verify(authToken string, aud string) *TokenInfo {
-	return VerifyGoogleIDToken(authToken, GetCerts(GetCertsFromURL()), aud)
+	return VerifyGoogleIDToken(authToken, GetCerts(), aud)
 }
 
 // VerifyGoogleIDToken is
@@ -117,9 +119,12 @@ func GetCertsFromURL() []byte {
 }
 
 //GetCerts is
-func GetCerts(bt []byte) *Certs {
-	var certs *Certs
-	json.Unmarshal(bt, &certs)
+func GetCerts() *Certs {
+	if certs == nil {
+		bt := GetCertsFromURL()
+		certs = new(Certs)
+		json.Unmarshal(bt, certs)
+	}
 	return certs
 }
 

@@ -1,4 +1,4 @@
-package GoogleIdTokenVerifier
+package googleIdTokenVerifier
 
 import "testing"
 
